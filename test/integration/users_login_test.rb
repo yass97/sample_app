@@ -40,4 +40,21 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', logout_path, count: 0
     assert_select 'a[href=?]', user_path(@user), count: 0
   end
+
+  test "login with remembering" do
+    log_in_as(@user, remember_me: '1')
+    # assert_not_empty cookies['remember_token']
+    assert_equal cookies[:remember_token], assigns(:user).remember_token
+  end
+
+  test "login without remembering" do
+    # cookies を保存してログイン
+    log_in_as(@user, remember_me: '1')
+    # delete : HTTP リクエストの種類
+    # sessions#destroy がコールされる
+    delete logout_path
+    # cookies を削除してログイン
+    log_in_as(@user, remember_me: '0')
+    assert_empty cookies['remember_token']
+  end
 end
