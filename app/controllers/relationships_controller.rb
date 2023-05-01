@@ -5,7 +5,7 @@ class RelationshipsController < ApplicationController
     # フォローするユーザーを取得
     @user = User.find(params[:followed_id])
     # ユーザーをフォロー
-    current_user.follow(user)
+    current_user.follow(@user)
     respond_to do |format|
       format.html { redirect_to @user }
       format.js
@@ -16,7 +16,7 @@ class RelationshipsController < ApplicationController
     # フォローされているユーザーを取得
     @user = Relationship.find(params[:id]).followed
     # フォロー解除
-    current_user.unfollow(user)
+    current_user.unfollow(@user)
     respond_to do |format|
       format.html { redirect_to @user }
       format.js
